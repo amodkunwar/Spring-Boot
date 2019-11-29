@@ -1,0 +1,32 @@
+package com.timeconversion;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+public class TimeConversion {
+	public static void main(String[] args) {
+		LocalDate localDate = LocalDate.parse("2019-11-29");
+		LocalTime localTime = LocalTime.parse("10:49");
+		LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+		
+		LocalDate localDate1 = LocalDate.parse("2019-11-29");
+		LocalTime localTime1 = LocalTime.parse("11:30");
+		LocalDateTime localDateTime1 = LocalDateTime.of(localDate1, localTime1);
+		
+		convertTime(localDateTime, "America/New_York", "GMT");
+		convertTime(localDateTime1, "Asia/Singapore", "America/New_York");
+	}
+
+	private static String convertTime(LocalDateTime localDateTime, String fromTimeZone, String toTimeZone) {
+		ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of(fromTimeZone));
+		ZonedDateTime zoneSingapore = zonedDateTime.withZoneSameInstant(ZoneId.of(toTimeZone));
+		String startTimeInGMT = zoneSingapore.getHour() + ":" + zoneSingapore.getMinute();
+		System.out.println(
+				zoneSingapore.getYear() + "-" + zoneSingapore.getMonth() + "-" + zoneSingapore.getDayOfMonth());
+		System.out.println("Converted Time in " + toTimeZone + "::::" + startTimeInGMT);
+		return startTimeInGMT;
+	}
+}
