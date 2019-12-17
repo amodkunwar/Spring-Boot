@@ -65,3 +65,62 @@ public class EmployeeServiceTest {
 	}
 
 }
+
+===================================================================================================================================
+
+/**
+ * 
+ */
+package com.example.mapping.service;
+
+import java.util.Optional;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.example.mapping.company.service.CompanyServiceImpl;
+import com.example.mapping.dto.Company;
+import com.example.mapping.repository.CompanyRepository;
+
+/**
+ * @author amod.kunwar
+ *
+ */
+@RunWith(SpringRunner.class)
+public class CompanyServiceImplTest {
+
+	@InjectMocks
+	private CompanyServiceImpl companyService;
+
+	@Mock
+	private CompanyRepository companyRepository;
+
+	@Test
+	public void testSaveCompany() {
+		Company company = new Company("Mphasis");
+		Mockito.doReturn(company).when(companyRepository).save(company);
+		companyService.saveCompany(company);
+	}
+
+	@Test
+	public void testFindById() throws Exception {
+		Company company = new Company("Mphasis");
+		Optional<Company> findById = Optional.of(company);
+		Mockito.doReturn(findById).when(companyRepository).findById(1);
+		companyService.findById(1);
+	}
+
+	@Test(expected = Exception.class)
+	public void testFindById_notFound() throws Exception {
+		Company company = new Company("Mphasis");
+		Optional<Company> findById = Optional.of(company);
+		Mockito.doReturn(findById).when(companyRepository).findById(2);
+		companyService.findById(1);
+	}
+
+}
+
