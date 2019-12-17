@@ -1,0 +1,67 @@
+package com.example.demo.service;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.example.demo.CrudOperationsApplication;
+import com.example.demo.entity.Employee;
+import com.example.demo.repository.EmployeeRepository;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = CrudOperationsApplication.class)
+public class EmployeeServiceTest {
+
+	@Autowired
+	private EmployeeService employeeService;
+
+	@MockBean
+	private EmployeeRepository employeeRepository;
+
+	@Test
+	public void testGetMethod() {
+		when(employeeRepository.findAll())
+				.thenReturn(Stream.of(new Employee(123, "Amod", "amod@gmail.com", 12345.0, 23),
+						new Employee(123, "Amod", "amod@gmail.com", 12345.0, 23)).collect(Collectors.toList()));
+		assertEquals(2, employeeService.getAllEmployee().size());
+	}
+
+	@Test
+	public void updateEmployeeTest() {
+		Employee employee = new Employee(123, "Amod", "amod@gmail.com", 12345.0, 23);
+		when(employeeService.updateEmployee(employee)).thenReturn(employee);
+		assertEquals(employee, employeeService.updateEmployee(employee));
+	}
+
+	@Test
+	public void addNewEmployeeTest() {
+		Employee employee = new Employee(123, "Amod", "amod@gmail.com", 12345.0, 23);
+		when(employeeService.addNewEmployee(employee)).thenReturn(employee);
+		assertEquals(employee, employeeService.addNewEmployee(employee));
+	}
+
+	@Test
+	public void deleteAllEmployeeTest() {
+		employeeService.deleteAllEmployee();
+		verify(employeeRepository, times(1)).deleteAll();
+	}
+
+	@Test
+	public void deleteEmployeeByIdTest() {
+		Integer id = 124;
+		employeeService.deleteEmployeeById(id);
+		verify(employeeRepository, times(1)).deleteEmployeeById(id);
+	}
+
+}
