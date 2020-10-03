@@ -1,0 +1,16 @@
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.TimeZone;
+
+public class Hello {
+	public static void main(String[] args) {
+		Instant now = Instant.now();
+		Instant plus = Instant.now().plus(35, ChronoUnit.DAYS);
+		if(!TimeZone.getTimeZone("America/New_York").inDaylightTime(Date.from(plus))) {
+			System.out.println("yes");
+		}else {
+			System.out.println("No"); 
+		}
+	}
+}
